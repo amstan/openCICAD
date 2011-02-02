@@ -6,12 +6,12 @@ Start of Message. Always the Dominant Bit.
 ### ID
 Message ID. Lower Will always take priority.
 
-If most significant bit is set, it means the current byte is not the last one. This goes up to 3 bytes.
+If most significant bit is dominant, it means the current byte is not the last one. This goes up to 3 bytes.
 
     ID Length   # of Possible IDs
     1           128
     2           128*128
-    3           12
+    3           128*128*255
 
 ### CTRL
 
@@ -19,9 +19,9 @@ If most significant bit is set, it means the current byte is not the last one. T
 
 ### DATA
 
-4 bits of length allows a maximum of 16 bytes of data.
+4 bits of length allows a maximum of 15 bytes of data.
 
-### CRC
+### [CRC](https://github.com/amstan/openCICAD/wiki/CRC)
 
 Checksum for the whole message. The CRC will be done using Baicheva's 16 bit polynomial (0xC86C).
 
@@ -31,7 +31,7 @@ If peers recieved the message without errors, they drive this bit to Dominant.
 
 ### EoM
 
-End of Message. 9 Recessive Bits.  
+End of Message. 10 Recessive Bits. This is longer than 1 byte + delimiter.
 
 ### Byte delimiters.
 
