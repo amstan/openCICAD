@@ -2,7 +2,12 @@ The crc needs to be calculated by all the receiving nodes real time and Ack the 
 
 [Web-based CRC calculator]( message. http://depa.usst.edu.cn/chenjq/www2/SDesign/JavaScript/CRCcalculation.htm)
 
-**CRC-16:** 0xC86C = x^16 + x^15 + x^14 + x^11 + x^6 + x^5 + x^3 + x^2 + 1
+## CRC-16
+The polynomial for the CRC was chosen to be 0xC86C = x^16 + x^15 + x^14 + x^11 + x^6 + x^5 + x^3 + x^2 + 1.
+
+According to [this paper](https://github.com/amstan/openCICAD/raw/f803ea50e8b95cbeb35dbc2ddf5a203411480454/doc/koopman04_crc_poly_embedded.pdf), 0xC86C is one of the best 16 bit checksum polynomials.
+
+## How to calculate the CRC
 
 * take 16 bits, XOR with 0xC86C
 * crop the most significant 0 bits
