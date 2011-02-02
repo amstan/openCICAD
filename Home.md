@@ -4,3 +4,6 @@ openCICAD (Controller Inter Communication Array Databus) is a serial inter devic
 * There is no master and slave concept.
 * Messages have IDs not the devices.
 * In case of a collision, the priority is given to the message with lower ID.
+
+## Contents
+* [CRC](CRC)
