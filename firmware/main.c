@@ -7,7 +7,7 @@
 #include <inttypes.h>
 
 #include <delay12.h>	//Modified Delay for 12MHZ clk
-#include <BITOP.h>		//BIT operations macro
+#include <bitop.h>		//BIT operations macro
 #include <port.h>		//Port names assignment and eeprom512K
 
 #include <avr/interrupt.h>
@@ -15,7 +15,7 @@
 
 #include <avr/sleep.h>
 #include <avr/wdt.h>
-#include <cicad.c>
+#include <openCICAD.c>
 ////////////////////////////////////////////////////////////////////////////
 #include <avr/eeprom.h> //Internal EEprom
 #define EEPROM_SECTION  __attribute__ ((section (".eeprom")))
