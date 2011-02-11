@@ -14,6 +14,10 @@
 #define ST_SOM	1
 #define ST_
 
+#define OK  1
+#define NOK 0
+#define TIMER_OVERFLOW (TIFR0&(1<<OCF0A))
+
 void USART_Transmit(unsigned char byte);
 ////////////////////////////////////////////////////////////////////////////
 const unsigned char mask[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
@@ -47,51 +51,38 @@ inline void check_crc(unsigned char u8_rec_bit)
 	}
 }
 
-inline void _delay_(uint8_t __count)
-{
-	__asm__ volatile (
-		"1: dec %0" "\n\t"
-		"brne 1b"
-		: "=r" (__count)
-		: "0" (__count)
-	);
-}
 
-inline unsigned char read_bit_sync_count(unsigned char _count)
+unsigned char hist=1; // init so it won't trigger first time
+
+inline unsigned char read_bit_sync_count(void)
 // waits 10us until mesures the line state and returns
 // it performs a sync on recessive->dominant transition - on detection waits 5us to return
 // returns 1 if transition detected and returns immediate upon detection
 // waits the _us time and returns 0 if no transition detected
 {
-	unsigned char index;
-	unsigned char hyst=0;
 	unsigned char temp=0;
 
-	temp=IR_REC_RELEASED;
-	hyst=temp;
+	// wait until timer expires or 0->1 transition
 
-	//
-
-	for(index=0;index<_count;index++)
+	while(!TIMER_OVERFLOW) // wait for it
 	{
-		//CLEAR_LED_G;SET_LED_G;
 		temp=IR_REC_RELEASED;
-		if(temp && !hyst)
+		if(temp && !hist)
 		{
-			_delay_(7);
-			//CLEAR_LED_G;SET_LED_G;
-			//CLEAR_LED_G;
-			return 1;
-			break;
-		}
-		//_delay_(1);
-		hyst=temp;
-	}
-	for(index=0;index<4;index++)
-		hyst=IR_REC_RELEASED; // for delay instead of CLEAR_LED_G;SET_LED_G;
-	//CLEAR_LED_G;SET_LED_G;
-	return temp;
+			TIFR0 |= (1<<OCF0A); //reset the flag
+			TCNT0 = 0; //reset timer
+			OCR0A = 95; //value for sync
 
+			hist=temp;
+			return 1;
+		}
+		hist=temp;
+	}
+	TIFR0 |= (1<<OCF0A); //reset the flag
+	OCR0A = 81; //value for 10us
+	//CLEAR_LED_G;CLEAR_LED_G;SET_LED_G;SET_LED_G;
+
+	return temp;
 }
 
 
@@ -101,24 +92,19 @@ inline unsigned char receive_byte(void)
 	unsigned char byte_value=0;
 	unsigned char index=0;
 
-
 	for(index=0; index<8; index++)
 	{
-		if(read_bit_sync_count(4))
+		if(read_bit_sync_count())
 		{
 			byte_value |= mask[index];
 			check_crc(1);
 		}
 		else
 		{
-			_delay_(3);
 			check_crc(0);
 		}
 	}
-
-
-
-	read_bit_sync_count(5); // read and sync to the delimiter
+	read_bit_sync_count(); // read and sync to the delimiter
 	return byte_value;
 }
 
@@ -126,6 +112,14 @@ inline void cicad_receive(void)
 {
 	unsigned char index;
 	unsigned char temp;
+
+	// set and start the timer
+	TIFR0 |= (1<<OCF0A); //reset the flag
+	TCCR0A = (1<<WGM01); // CTC mode
+	TCNT0 = 0; //reset timer
+	OCR0A = 43; // first value to account on isr lag
+	TCCR0B = 0x01; // clock and start
+
 	u16_crc=0;
 	//received recessive->dominant transition
 	//read_bit_sync_count(4);
@@ -144,7 +138,7 @@ inline void cicad_receive(void)
 
 	}
 	u8_rec_data_len = (u8_rec_buff[3] & 0x0F);
-
+	hist=1;
 	//TODO ack should come here - do it when HW is ready
 }
 
@@ -155,13 +149,13 @@ inline void function_SIG_PIN_CHANGE0(void)
 	if(IR_REC_RELEASED) // raised
 	{
 		cicad_receive();
+		TCCR0B = 0x00; //stop timer
 		// send buffer to uart - just for test, it spends a lot of time here
 				for(index=0;index<u8_rec_data_len+6;index++)
 				{
 					USART_Transmit(u8_rec_buff[index]);
 				}
-				if(u16_crc==0) USART_Transmit(0x00);
-				else USART_Transmit(0xFF);
+				if(u16_crc!=0) USART_Transmit(0xFF);
 	}
 
 
@@ -169,83 +163,68 @@ inline void function_SIG_PIN_CHANGE0(void)
 ISR (SIG_PIN_CHANGE0 ){ function_SIG_PIN_CHANGE0(); }
 
 
-/*inline void function_SIG_INTERRUPT0(void)
+inline unsigned char send_cicad_byte(unsigned char byte)
 {
-	// INT0 just got raised
+#define T_VAL_1 38
+#define T_VAL_2 37
+	unsigned char i=0;
 
+	for(i=0;i<8;i++)
+	{
+		//wait end of previous byte
+		while(!TIMER_OVERFLOW);
+		// set the pin
+		if(byte & mask[i]) SET_IR_EM;
+		else CLEAR_IR_EM;
+		TIFR0 |= (1<<OCF0A); //reset the flag
+		OCR0A = T_VAL_1; //value for 5us
+		while(!TIMER_OVERFLOW); // wait expiration
+		// TODO check if no colision and no priority lost - when HW is done
+		TIFR0 |= (1<<OCF0A); //reset the flag
+		OCR0A = T_VAL_2; //value for 5us
+	}
+	while(!TIMER_OVERFLOW); // wait expiration
+	//send delimiter
+	if(byte & 0x01) CLEAR_IR_EM;
+	else SET_IR_EM;
+	TIFR0 |= (1<<OCF0A); //reset the flag
+	OCR0A = T_VAL_1; //value for 5us
+	while(!TIMER_OVERFLOW); // wait expiration
+	// TODO check if no colision and no priority lost - when HW is done
+	TIFR0 |= (1<<OCF0A); //reset the flag
+	OCR0A = T_VAL_2; //value for 5us
+	return OK;
 }
-ISR (SIG_INTERRUPT0 ){ function_SIG_INTERRUPT0();}*/
 
-////////////////////////////////////////////////////////////////////////////
-// Timer 0 interrupt every 1s
-/*void function_SIG_OUTPUT_COMPARE0A(void)
-{
-	// test
-	//flash(LED_GREEN,1);
-
-	// decrement the timeout
-	if(u8_timeout>0) u8_timeout--;
-	if(u16_timer>0) u16_timer--;
-}
-ISR (SIG_OUTPUT_COMPARE0A){function_SIG_OUTPUT_COMPARE0A();}*/
-
-
-
-
-
-void send_cicad_message(unsigned char len_bytes)
+unsigned char send_cicad_message(unsigned char len_bytes)
+// returns OK if message sent ok;
+// returns NOK if priority lost;
 {
 	unsigned char index_byte;
 	// TODO wait until no message on comm media; implement wait for bus free on transmitting - it needs a kind of global status
-	// TODO check if no colision and no priority lost
+
+	// set and start the timer
+	TIFR0 |= (1<<OCF0A); //reset the flag
+	TCCR0A = (1<<WGM01); // CTC mode
+	TCNT0 = 0; //reset timer
+	OCR0A = 65; // first value to account on isr delay
+	TCCR0B = 0x01; // clock and start
 	// START OF FRAME
 	SET_IR_EM;
-	_delay_us(BIT_TIME-3);
 
 	for(index_byte=0;index_byte<len_bytes;index_byte++)
 	{
-		// bit 7
-		if(u8_trans_buff[index_byte] & 0x80) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 6
-		if(u8_trans_buff[index_byte] & 0x40) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 5
-		if(u8_trans_buff[index_byte] & 0x20) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 4
-		if(u8_trans_buff[index_byte] & 0x10) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 3
-		if(u8_trans_buff[index_byte] & 0x08) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 2
-		if(u8_trans_buff[index_byte] & 0x04) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 1
-		if(u8_trans_buff[index_byte] & 0x02) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		// bit 0
-		if(u8_trans_buff[index_byte] & 0x01) SET_IR_EM;
-		else CLEAR_IR_EM;
-		_delay_us(BIT_TIME-1);
-		//send delimiter
-		if(u8_trans_buff[index_byte] & 0x01) CLEAR_IR_EM;
-		else SET_IR_EM;
-		_delay_us(BIT_TIME-2);
+		if(send_cicad_byte(u8_trans_buff[index_byte])!= OK) return NOK;
 	}
 	//send ACK delimiter - send recessive
+	while(!TIMER_OVERFLOW); // wait expiration
+	TIFR0 |= (1<<OCF0A); //reset the flag
 	CLEAR_IR_EM;
-	_delay_us(BIT_TIME);
+	while(!TIMER_OVERFLOW); // wait expiration
+	TIFR0 |= (1<<OCF0A); //reset the flag
 	//wait ACK here TODO
-
+	TCCR0B = 0x00; //stop timer
+	return OK;
 }
 
 
