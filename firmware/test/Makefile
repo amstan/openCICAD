@@ -11,7 +11,10 @@ FET = rf2500
 GDB = msp430-gdb
 GDBTUI = $(GDB)tui
 
-OBJS=$(PROG).o
+# Uncomment the following to enable debugging
+CFLAGS += -g -DDEBUG
+
+OBJS=$(PROG).o cicad_physical.o
 
 all: $(PROG).elf  $(PROG).lst
 	$(SIZE) $(PROG).elf
