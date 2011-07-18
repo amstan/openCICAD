@@ -30,8 +30,25 @@ int main(void)
 	init_chip();
 	init_io();
 	cicad_physical_init();
+	cicad_init_timer(1);
+	//cicad_set_period(0x8000);
+	CICAD_SET_TIMER(0x8000);
+	CICAD_TIMER_RESET;
+	
+	unsigned int i;
 	
 	while(1) {
-		cicad_send_bit(switch_pressed());
+		while(!CICAD_CHECK_TIME) {
+			if(switch_pressed()) {
+				CICAD_TIMER_RESET;
+			}
+		}
+		CICAD_RESET_CHECK_TIME;
+		
+		i++;
+		i%=488; //488hz=16mhz/0x8000
+		if(i==0) {
+			toggle_bit(P1OUT,LED);
+		}
 	}
 }
