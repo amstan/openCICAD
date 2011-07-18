@@ -17,13 +17,14 @@ void init_chip() {
 }
 
 void init_io() {
-	set_bit(P1DIR,LED); //enable led
+	//enable led
+	set_bit(P1DIR,LED);
 	
 	//enable S2
 	set_bit(P1REN,S2);
 	set_bit(P1OUT,S2);
 }
- 
+
 int main(void)
 {
 	init_chip();
