@@ -37,7 +37,12 @@ int main(void)
 	unsigned long i = 0;
 	
 	while(1) {
-		while(!(TACCTL0 & CCIFG));
+		while(!(TACCTL0 & CCIFG)) {
+			if(switch_pressed()) {
+				//restart the timer
+				TAR=0;
+			}
+		}
 		TACCTL0&=~CCIFG;
 		
 		i++;
