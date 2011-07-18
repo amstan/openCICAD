@@ -28,7 +28,7 @@ int main(void)
 {
 	init_chip();
 	init_io();
-	cicad_init();
+	cicad_physical_init();
 	
 	while(1) {
 		cicad_send_bit(switch_pressed());
