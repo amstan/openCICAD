@@ -30,10 +30,10 @@ int main(void)
 	init_chip();
 	init_io();
 	cicad_physical_init();
+	
+	cicad_set_period(0x8000);
+	CICAD_SET_TIMER(cicad_1_period);
 	cicad_init_timer(1);
-	//cicad_set_period(0x8000);
-	CICAD_SET_TIMER(0x8000);
-	CICAD_TIMER_RESET;
 	
 	unsigned int i;
 	

@@ -31,6 +31,5 @@ void cicad_set_period(unsigned int period) {
 void cicad_init_timer(unsigned char on) {
 	TACTL |= TASSEL_2;     //Internal osc
 	TACTL |= ID_0;         //1x prescaler
-	change_bit(TACTL,1,on) //change the mode, on=1 => count up to taccr0, on=0 => stop
-	cicad_set_period(0);
+	change_bit(TACTL,4,on) //change the mode, on=1 => count up to taccr0, on=0 => stop
 }
