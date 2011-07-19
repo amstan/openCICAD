@@ -38,6 +38,9 @@ void cicad_set_period(unsigned int period);
 ///Resets the CHECK_TIME flag.
 #define CICAD_RESET_CHECK_TIME (TACCTL0&=~CCIFG)
 
+///Combination of CICAD_CHECK_TIME and CICAD_RESET_CHECK_TIME
+#define CICAD_WAIT_NEXT_BIT while(!CICAD_CHECK_TIME); CICAD_RESET_CHECK_TIME;
+
 ///Resets the timer to start from 0 again.
 #define CICAD_TIMER_RESET (TAR=0)
 

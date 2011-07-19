@@ -31,24 +31,25 @@ int main(void)
 	init_io();
 	cicad_physical_init();
 	
-	cicad_set_period(0x8000);
+	cicad_set_period(0x0c00);
 	CICAD_SET_TIMER(cicad_1_period);
 	cicad_init_timer(1);
 	
 	unsigned int i;
+	unsigned char d =0;
+	
+	unsigned char a[] = {0,1,0,1,0,0,1,1,0,0,0,0,1,1,1,1,0,1};
+	unsigned char na = 18;
 	
 	while(1) {
-		while(!CICAD_CHECK_TIME) {
-			if(switch_pressed()) {
-				CICAD_TIMER_RESET;
-			}
-		}
-		CICAD_RESET_CHECK_TIME;
+		cicad_send_bit(0);
+		__delay_cycles(32000);
 		
-		i++;
-		i%=488; //488hz=16mhz/0x8000
-		if(i==0) {
-			toggle_bit(P1OUT,LED);
+		CICAD_TIMER_RESET;
+		for(i=0;i<na;i++) {
+			cicad_send_bit(a[i]);
+			
+			CICAD_WAIT_NEXT_BIT;
 		}
 	}
 }
