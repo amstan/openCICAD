@@ -19,10 +19,36 @@ void init_chip() {
 void init_io() {
 	//enable led
 	set_bit(P1DIR,LED);
+	clear_bit(P1OUT,LED);
 	
 	//enable S2
 	set_bit(P1REN,S2);
 	set_bit(P1OUT,S2);
+}
+
+void error() {
+	unsigned int i;
+	while(1) {
+		for(i=0;i<100;i++)
+			__delay_cycles(32000);
+		toggle_bit(P1OUT,LED);
+	}
+}
+
+inline void cicad_send_byte(unsigned char byte) {
+	char i;
+	unsigned char b;
+	
+	//one by one send a bit from the byte
+	for(i=7; i>=0; i--) {
+		b=test_bit(byte,i);
+		CICAD_WAIT_NEXT_BIT;
+		cicad_send_bit(b);
+	}
+	
+	//send sync bit, inverse of the last one
+	CICAD_WAIT_NEXT_BIT;
+	cicad_send_bit(~b);
 }
 
 int main(void)
@@ -35,21 +61,7 @@ int main(void)
 	CICAD_SET_TIMER(cicad_1_period);
 	cicad_init_timer(1);
 	
-	unsigned int i;
-	unsigned char d =0;
-	
-	unsigned char a[] = {0,1,0,1,0,0,1,1,0,0,0,0,1,1,1,1,0,1};
-	unsigned char na = 18;
-	
 	while(1) {
-		cicad_send_bit(0);
-		__delay_cycles(32000);
-		
-		CICAD_TIMER_RESET;
-		for(i=0;i<na;i++) {
-			cicad_send_bit(a[i]);
-			
-			CICAD_WAIT_NEXT_BIT;
-		}
+		cicad_send_byte(0b10101010);
 	}
 }
