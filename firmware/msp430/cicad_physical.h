@@ -31,12 +31,14 @@ inline void cicad_send_bit(unsigned char val);
 
 ///Setups the timer.
 ///@param on if the timer should be on or off.
+///@note This function also clears the overflow flag and the value in the timer.
 void cicad_init_timer(unsigned char on);
 
 ///Periods between bits, stored and calculated by cicad_calculate_period to save time..
 volatile unsigned int cicad_1_period, cicad_1_5_period;
 
-///Sets the cicad_1_period, calculates the cicad_1_5_period to save time.
+///Period of the data, the smaller this is the faster the bus speed. Period measured in cpu cycles.
+///This sets the cicad_1_period, calculates the cicad_1_5_period to save time.
 void cicad_set_period(unsigned int period);
 
 ///Makes it so the timer counts to val.
@@ -53,7 +55,7 @@ void cicad_set_period(unsigned int period);
 ///Combination of CICAD_CHECK_TIME and CICAD_RESET_CHECK_TIME
 #define CICAD_WAIT_NEXT_BIT while(!CICAD_CHECK_TIME); CICAD_RESET_CHECK_TIME;
 
-///Resets the timer to start from 0 again.
-#define CICAD_TIMER_RESET (TAR=0)
+///Resets the timer to start from 0 again. Also clears the CHECK_TIME flag.
+#define CICAD_TIMER_RESET (TAR=0); CICAD_RESET_CHECK_TIME;
 
 #endif

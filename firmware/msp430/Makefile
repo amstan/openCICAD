@@ -12,7 +12,7 @@ GDB = msp430-gdb
 GDBTUI = $(GDB)tui
 
 # Uncomment the following to enable debugging
-CFLAGS += -g -DDEBUG
+#CFLAGS += -g -DDEBUG
 
 OBJS=$(PROG).o cicad_physical.o cicad.o
 

@@ -44,19 +44,12 @@ int main(void)
 	init_chip();
 	init_io();
 	cicad_physical_init();
+	cicad_set_period(0x0c48); //0x0c48=200us
 	
-	cicad_set_period(0x0c00);
-	CICAD_SET_TIMER(cicad_1_period);
-	cicad_init_timer(1);
+	unsigned char a[] = {10};
 	
 	while(1) {
-		CICAD_TIMER_RESET;
-		CICAD_RESET_CHECK_TIME;
-		
-		cicad_send_byte(0b10000000);
-		cicad_send_byte(0b00000001);
-		
-		cicad_send_bit(CICAD_RECESSIVE);
+		cicad_send_message(0, (sizeof a), a);
 		__delay_random();
 	}
 }
