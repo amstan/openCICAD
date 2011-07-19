@@ -26,11 +26,15 @@ void init_io() {
 	set_bit(P1OUT,S2);
 }
 
-void error() {
+void __delay_random() {
 	unsigned int i;
+	for(i=0;i<20;i++)
+		__delay_cycles(32000);
+}
+
+void error() {
 	while(1) {
-		for(i=0;i<100;i++)
-			__delay_cycles(32000);
+		__delay_random();
 		toggle_bit(P1OUT,LED);
 	}
 }
@@ -46,6 +50,13 @@ int main(void)
 	cicad_init_timer(1);
 	
 	while(1) {
-		cicad_send_byte(0b00000010);
+		CICAD_TIMER_RESET;
+		CICAD_RESET_CHECK_TIME;
+		
+		cicad_send_byte(0b10000000);
+		cicad_send_byte(0b00000001);
+		
+		cicad_send_bit(CICAD_RECESSIVE);
+		__delay_random();
 	}
 }
