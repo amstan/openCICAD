@@ -14,7 +14,7 @@ GDBTUI = $(GDB)tui
 # Uncomment the following to enable debugging
 CFLAGS += -g -DDEBUG
 
-OBJS=$(PROG).o cicad_physical.o
+OBJS=$(PROG).o cicad_physical.o cicad.o
 
 all: $(PROG).elf  $(PROG).lst
 	$(SIZE) $(PROG).elf

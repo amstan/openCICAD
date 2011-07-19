@@ -2,7 +2,18 @@
 #define CICAD_PHYSICAL_H
 
 ///expects CICAD_PIN to be defined.
+///@TODO Have a way to input the MCU port into this file
 #include "config.h"
+
+///Dominant bit definition, if it's either a logical low or high.
+///@note Polarity 0 belived to work.
+#define CICAD_POLARITY 1
+
+///Defines for easy use.
+///@note these are not the logic level. But LOGIC_LEVEL_FOR_DOMINANT = CICAD_DOMINANT XNOR CICAD_POLARITY.
+///@example cicad_send_bit(CICAD_DOMINANT); //Send SoM
+#define CICAD_DOMINANT 1
+#define CICAD_RECESSIVE 0
 
 ///Setups the pins for the physical layer.
 void cicad_physical_init();
@@ -14,7 +25,8 @@ void cicad_physical_init();
 inline unsigned char cicad_read_bit();
 
 ///Sends a bit.
-///@param val a 1 here will make the bus go to dominant, 0 will change it back to high Z so it goes back to recessive
+///@param val a 1 here will make the bus go to dominant, 0 will change it back to high Z so it goes back to recessive.
+///@note there is no delay in this function.
 inline void cicad_send_bit(unsigned char val);
 
 ///Setups the timer.

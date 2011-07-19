@@ -1,6 +1,6 @@
 #include <msp430.h>
 
-#include "cicad_physical.h"
+#include "cicad.h"
 #include "bitop.h"
 #include "debug.h"
 
@@ -35,22 +35,6 @@ void error() {
 	}
 }
 
-inline void cicad_send_byte(unsigned char byte) {
-	char i;
-	unsigned char b;
-	
-	//one by one send a bit from the byte
-	for(i=7; i>=0; i--) {
-		b=test_bit(byte,i);
-		CICAD_WAIT_NEXT_BIT;
-		cicad_send_bit(b);
-	}
-	
-	//send sync bit, inverse of the last one
-	CICAD_WAIT_NEXT_BIT;
-	cicad_send_bit(~b);
-}
-
 int main(void)
 {
 	init_chip();
@@ -62,6 +46,6 @@ int main(void)
 	cicad_init_timer(1);
 	
 	while(1) {
-		cicad_send_byte(0b10101010);
+		cicad_send_byte(0b00000010);
 	}
 }
