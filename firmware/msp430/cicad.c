@@ -20,7 +20,7 @@ inline unsigned char cicad_send_byte(unsigned char byte) {
 	CICAD_WAIT_NEXT_BIT;
 	cicad_send_bit(!b);
 	
-	return OK;
+	return CICAD_OK;
 }
 
 unsigned char cicad_send_message(unsigned long id, unsigned char n, unsigned char *message) {
@@ -72,5 +72,5 @@ unsigned char cicad_send_message(unsigned long id, unsigned char n, unsigned cha
 	CICAD_WAIT_NEXT_BIT;
 	cicad_init_timer(0);
 	
-	return OK;
+	return CICAD_OK;
 }

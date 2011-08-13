@@ -32,14 +32,18 @@ inline void cicad_send_bit(unsigned char val);
 ///Setups the timer.
 ///@param on if the timer should be on or off.
 ///@note This function also clears the overflow flag and the value in the timer.
+///@note This function enables the timer interrupt.
 void cicad_init_timer(unsigned char on);
+
+///Interrupt vector function call macro
+#define CICAD_TIMER_INTERRUPT_VECTOR void __attribute__((interrupt (TIMER0_A0_VECTOR)))
 
 ///Periods between bits, stored and calculated by cicad_calculate_period to save time.
 volatile unsigned int cicad_0_5_period, cicad_1_period, cicad_1_5_period;
 
 ///Period of the data, the smaller this is the faster the bus speed. Period measured in cpu cycles.
 ///This sets the cicad_1_period, calculates the cicad_0_5_period and cicad_1_5_period to save time.
-void cicad_set_period(unsigned int period);
+void cicad_calculate_period(unsigned int period);
 
 ///Makes it so the timer counts to val.
 ///@param val Sets TACCR0 to val. cicad_1_period, cicad_1_5_period can be used in here.
