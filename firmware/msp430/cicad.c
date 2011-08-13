@@ -7,6 +7,8 @@ inline unsigned char cicad_send_byte(unsigned char byte) {
 	char i;
 	unsigned char b;
 	
+	CICAD_SET_TIMER(cicad_0_5_period);
+	
 	//one by one send a bit from the byte
 	for(i=7; i>=0; i--) {
 		b=test_bit(byte,i);

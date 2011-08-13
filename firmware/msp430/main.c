@@ -46,10 +46,18 @@ int main(void)
 	cicad_physical_init();
 	cicad_set_period(0x0c48); //0x0c48=200us
 	
+	
 	unsigned char a[] = {10};
 	
+	//Delete when not using send_byte
+	CICAD_SET_TIMER(cicad_1_period);
+	cicad_init_timer(1);
+	
 	while(1) {
-		cicad_send_message(0, (sizeof a), a);
+		CICAD_TIMER_RESET;
+		if(cicad_send_byte(0b10001010)==CANNOT_RECESS
+		CICAD_WAIT_NEXT_BIT;
+		cicad_send_bit(CICAD_RECESSIVE);
 		__delay_random();
 	}
 }

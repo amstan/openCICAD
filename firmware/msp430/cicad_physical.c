@@ -29,7 +29,8 @@ inline void cicad_send_bit(unsigned char val) {
 
 void cicad_set_period(unsigned int period) {
 	cicad_1_period=period;
-	cicad_1_5_period=period+period/2;
+	cicad_0_5_period=period/2;
+	cicad_1_5_period=cicad_1_period+cicad_0_5_period;
 }
 
 void cicad_init_timer(unsigned char on) {

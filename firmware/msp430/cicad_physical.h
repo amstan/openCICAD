@@ -34,11 +34,11 @@ inline void cicad_send_bit(unsigned char val);
 ///@note This function also clears the overflow flag and the value in the timer.
 void cicad_init_timer(unsigned char on);
 
-///Periods between bits, stored and calculated by cicad_calculate_period to save time..
-volatile unsigned int cicad_1_period, cicad_1_5_period;
+///Periods between bits, stored and calculated by cicad_calculate_period to save time.
+volatile unsigned int cicad_0_5_period, cicad_1_period, cicad_1_5_period;
 
 ///Period of the data, the smaller this is the faster the bus speed. Period measured in cpu cycles.
-///This sets the cicad_1_period, calculates the cicad_1_5_period to save time.
+///This sets the cicad_1_period, calculates the cicad_0_5_period and cicad_1_5_period to save time.
 void cicad_set_period(unsigned int period);
 
 ///Makes it so the timer counts to val.
