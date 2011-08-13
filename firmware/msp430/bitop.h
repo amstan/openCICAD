@@ -15,7 +15,7 @@
 #define toggle_bit(reg, bitNumb)          ((reg) ^= (1 << (bitNumb)))
 
 /// Test bit
-#define test_bit(reg, bitNumb)            ((reg) & (1 << (bitNumb)))
+#define test_bit(reg, bitNumb)            (((reg) & (1 << (bitNumb)))!=0)
 
 /// Change Bit
 #define change_bit(reg, bitNumb, val)     {if (val) set_bit(reg, bitNumb); else clear_bit(reg,bitNumb);}

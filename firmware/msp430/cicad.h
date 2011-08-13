@@ -9,11 +9,6 @@
 #define CICAD_CANNOT_RECESS 1
 #define CICAD_NO_ACK_RECIEVED 2
 
-///Sends one byte
-///@returns one of: CICAD_OK CICAD_CANNOT_RECESS
-///@TODO this function should return CICAD_CANNOT_RECESS when it detects a dominant when outputting recessive
-inline unsigned char cicad_send_byte(unsigned char byte);
-
 ///Sends one cicad message
 ///@param id Message ID. Lower Will always take priority. If most significant bit is dominant, it means the current byte is not the last one. This goes up to 3 bytes.
 ///@param n Length of the message. 4 bits of length allows a maximum of 15 bytes of data.

@@ -62,4 +62,8 @@ void cicad_calculate_period(unsigned int period);
 ///Resets the timer to start from 0 again. Also clears the CHECK_TIME flag.
 #define CICAD_TIMER_RESET (TAR=0); CICAD_RESET_CHECK_TIME;
 
+///Moves the timer to x, sets TAR=x.
+///@note This is used to the syncing of the timer to the line when recieving.
+#define CICAD_TIMER_MOVE(x) TAR=x; CICAD_RESET_CHECK_TIME;
+
 #endif
