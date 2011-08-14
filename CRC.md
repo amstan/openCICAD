@@ -1,6 +1,6 @@
 The crc needs to be calculated by all the receiving nodes real time and Ack the message.
 
-[Web-based CRC calculator]( message. http://depa.usst.edu.cn/chenjq/www2/SDesign/JavaScript/CRCcalculation.htm)
+[Web-based CRC calculator](http://depa.usst.edu.cn/chenjq/www2/SDesign/JavaScript/CRCcalculation.htm)
 
 ## CRC-16
 The polynomial for the CRC was chosen to be 0xC86C = x^16 + x^15 + x^14 + x^11 + x^6 + x^5 + x^3 + x^2 + 1.
