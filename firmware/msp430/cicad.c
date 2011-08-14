@@ -3,7 +3,7 @@
 
 #include "cicad.h"
 
-void cicad_init(cycles) {
+void cicad_init(unsigned int cycles) {
 	cicad_physical_init();
 	cicad_state=clear;
 	cicad_calculate_period(cycles);
@@ -188,7 +188,7 @@ void cicad_transmit(void) {
 	halfperiod^=1;
 }
 
-CICAD_TIMER_INTERRUPT_VECTOR cicad_timer_vector() {
+CICAD_TIMER_INTERRUPT_VECTOR cicad_timer_interrupt() {
 	if(transmit) {
 		cicad_transmit();
 	} else {

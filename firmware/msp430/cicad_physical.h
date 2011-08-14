@@ -40,7 +40,7 @@ inline void cicad_send_bit(unsigned char val);
 ///@note This function enables the timer interrupt.
 void cicad_init_timer(unsigned char on);
 
-///Interrupt vector function call macro
+///Timer isr macro
 #define CICAD_TIMER_INTERRUPT_VECTOR void __attribute__((interrupt (TIMER0_A0_VECTOR)))
 
 ///Periods between bits, stored and calculated by cicad_calculate_period to save time.
@@ -70,5 +70,8 @@ void cicad_calculate_period(unsigned int period);
 ///Moves the timer to x, sets TAR=x.
 ///@note This is used to the syncing of the timer to the line when recieving.
 #define CICAD_TIMER_MOVE(x) TAR=x; CICAD_RESET_CHECK_TIME;
+
+///Pin change isr macro
+#define CICAD_PIN_INTERRUPT_VECTOR void __attribute__((interrupt (PORT1_VECTOR)))
 
 #endif

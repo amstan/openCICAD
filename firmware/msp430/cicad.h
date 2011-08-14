@@ -5,7 +5,7 @@
 
 ///Initializes the openCicad library
 ///@param cycles How many cpu cycles is a clock pulse for the protocol. 0x640 cycles = 100us on a 16Mhz cpu with 1x prescaler.
-void cicad_init(cycles);
+void cicad_init(unsigned int cycles);
 
 ///Status defines.
 ///@todo Implement a way to notify these.
