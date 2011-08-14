@@ -1,3 +1,5 @@
+In order for devices to understand each other they'll each need an internal timer. They should have relatively the same period.
+
 ## RX/TX Timer Differences
 Using the current(8c815d6a6f1e9d9fddbd) algorithm of syncing the clock at every pulse edge there can be a maximum difference of +- 5.555% between the RX/TX timers.
 
