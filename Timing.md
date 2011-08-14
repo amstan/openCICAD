@@ -1,5 +1,10 @@
 ## RX/TX Timer Differences
-Using the current(8c815d6a6f1e9d9fddbd) algorithm of syncing the clock every edge there can be a maximum difference of +- 5.555% between the RX/TX timers. Anything more and it will make a slower device waiting to send a message send the SOM too late, loosing priority. Going down even further (under to 8 periods, +- 7.1%) will cause 8 consecutive bits to be read wrong, reading 7/9 consecutive bits instead.
+Using the current(8c815d6a6f1e9d9fddbd) algorithm of syncing the clock at every pulse edge there can be a maximum difference of +- 5.555% between the RX/TX timers.
+
+Sources of problems at lower/higher speeds:
+
+* Between 7.1% to 5.6%: EoM Problems, might loose priority during SoM if slower, violate the priority of others of faster.
+* Lower than 7.1%: Will cause 8 consecutive bits to be read wrong, reading 7/9 consecutive bits instead.
 
 An interactive demonstration can be found in [doc/rxtx timer differences.kig](https://github.com/amstan/openCICAD/blob/master/doc/rxtx%20timer%20differences.kig):
 ![Timing diagram](https://github.com/amstan/openCICAD/raw/master/doc/rxtx%20timer%20differences.png)
