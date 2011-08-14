@@ -4,7 +4,7 @@
 #include "cicad_physical.h"
 
 void cicad_physical_init() {
-	clear_bit(P1DIR, CICAD_PIN); //Input
+	clear_bit(P1DIR, CICAD_PIN); cicad_sending_bit=0; //Input/Recessive
 	clear_bit(P1REN, CICAD_PIN); //No resistor
 	
 	//Set the dominant bit to be outputted
@@ -25,6 +25,7 @@ inline void cicad_send_bit(unsigned char val) {
 	#endif
 	
 	change_bit(P1DIR, CICAD_PIN, val); //Enable outputting on the bus, therefore dominating it
+	cicad_sending_bit=val; //Remember what we're sending
 }
 
 void cicad_calculate_period(unsigned int period) {

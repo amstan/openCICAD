@@ -24,6 +24,10 @@ void cicad_physical_init();
 ///@note there is no delay in this function.
 inline unsigned char cicad_read_bit();
 
+///The last bit sent with cicad_send_bit
+///@note This bit can be used to discover if lost priority
+unsigned char cicad_sending_bit;
+
 ///Sends a bit.
 ///@param val a 1 here will make the bus go to dominant, 0 will change it back to high Z so it goes back to recessive.
 ///@note there is no delay in this function.
