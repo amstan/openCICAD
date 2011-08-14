@@ -57,12 +57,23 @@ int main(void)
 	//inits
 	init_chip();
 	init_io();
-	cicad_init(0x624); //0x624=100us according to my scope
+	cicad_init(0x600); //0x624=100us according to my scope
 	cicad_init_edge_interrupt();
+	
+	//tests done with 11 0s in a row, 0x624 tx timer
+	//tx version 0b1155b125f9820b7fae00209615e8074484f465, rx version current
+	
+	//test1
+	//<0x600 (97.7%) rx cases a 12th read pulse to appear
+	//0x680 (105.9%) rx causes the last bit's end of pulse(pulse length 100 cycles) to be after the edge of the next SOM
 	
 	cicad_send_bit(0);
 	
 	//unsigned char a[] = {0b11000011};
+	
+	transmit=0;
+	CICAD_SET_TIMER(cicad_1_period);
+	cicad_init_timer(1);
 	
 	while(1) {
 		//cicad_send_message(10, (sizeof a), a);
@@ -70,12 +81,11 @@ int main(void)
 }
 
 CICAD_PIN_INTERRUPT_VECTOR cicad_pin_interrupt() {
-	CICAD_PIN_INTERRUPT_RESET;	
+	CICAD_PIN_INTERRUPT_RESET;
+	
 	//Switch to the other edge
 	toggle_bit(P1IES, CICAD_PIN);
 	
-	set_bit(P1OUT,LED);
-	__delay_cycles(100);
-	clear_bit(P1OUT,LED);
+	CICAD_TIMER_MOVE(cicad_0_5_period);
 }
 

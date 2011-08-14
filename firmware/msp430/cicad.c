@@ -193,5 +193,14 @@ CICAD_TIMER_INTERRUPT_VECTOR cicad_timer_interrupt() {
 		cicad_transmit();
 	} else {
 		///@todo Recieve stuff
+		
+		//Pulse on a read
+		unsigned char t;
+		t=cicad_read_bit();
+		set_bit(P1OUT,LED);
+		__delay_cycles(100);
+		if(t)
+			__delay_cycles(300);
+		clear_bit(P1OUT,LED);
 	}
 }
