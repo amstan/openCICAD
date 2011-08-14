@@ -15,6 +15,7 @@ According to [this paper](https://github.com/amstan/openCICAD/raw/f803ea50e8b95c
 * restart
 
 **Transmitter Example:** 0xAAAA -> CRC:0xFFF6
+
     10101010101010100000000000000000
     11100100001101100
     010011101001110000
