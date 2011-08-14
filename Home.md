@@ -6,5 +6,6 @@ openCICAD (Controller Inter Communication Array Databus) is a serial inter devic
 * In case of a collision, the priority is given to the message with lower ID.
 
 ## Contents
-* [Message Structure](https://github.com/amstan/openCICAD/wiki/Message-Structure)
-* [CRC](https://github.com/amstan/openCICAD/wiki/CRC)
+* [[Timing]]
+* [[Message Structure]]
+* [[CRC]]
