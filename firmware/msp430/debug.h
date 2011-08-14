@@ -14,7 +14,7 @@
 #ifdef DEBUG
 	#define debug(...) printf(dbg,__VA_ARGS__); printf("\n"); fflush(stdout);
 #else
-	#define debug(...) (1)
+	#define debug(...) (1);
 #endif
 
 #endif

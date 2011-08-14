@@ -8,7 +8,7 @@
 void cicad_init(cycles);
 
 ///Status defines.
-///@TODO Implement a way to notify these.
+///@todo Implement a way to notify these.
 #define CICAD_OK 0
 #define CICAD_PIORITY_LOST 1
 #define CICAD_NO_ACK_RECIEVED 2
@@ -17,7 +17,10 @@ void cicad_init(cycles);
 volatile enum State {
 	clear,
 	som,
-	frombuffer, //id, ctrl, data, crc
+	
+	///The stuff to get from the buffer: id, ctrl, data, crc
+	frombuffer,
+	
 	ack,
 	eom,
 } cicad_state;
@@ -30,6 +33,5 @@ unsigned char transmit;
 ///@param n Length of the message. 4 bits of length allows a maximum of 15 bytes of data.
 ///@param message Message contents, up to 15 bytes long.
 void cicad_send_message(unsigned long id, unsigned char n, unsigned char *message);
-
 
 #endif

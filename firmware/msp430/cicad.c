@@ -35,12 +35,12 @@ unsigned char halfperiod;
 ///Used to count the end of message periods.
 unsigned char eom_count = 0;
 
-///@TODO Rename this function, should be internal use only. This function should not block, and should have a wrapper around it that does cool things.
+///@todo Rename this function, should be internal use only. This function should not block, and should have a wrapper around it that does cool things.
 void cicad_send_message(unsigned long id, unsigned char n, unsigned char *message) {
 	unsigned char i;
 	
 	//Wait till the line is clear
-	///@TODO Make this nonblocking
+	///@todo Make this nonblocking
 	while(state!=clear);
 	
 	//Start transmitting the start of message
@@ -83,7 +83,7 @@ void cicad_send_message(unsigned long id, unsigned char n, unsigned char *messag
 		ADD_BUFFER(message[i]);
 	}
 	
-	///@TODO CRC HERE
+	///@todo CRC HERE
 }
 
 ///Transmits the a cicad message using the tx states and the buffer. This function is called by the cicad_timer_vector interrupt.
@@ -148,7 +148,7 @@ void cicad_transmit(void) {
 				if(cicad_sending_bit!=cicad_read_bit()) {
 					//Loss of priority here
 					
-					///@TODO add priority loss message instead of turning the led on.
+					///@todo add priority loss message instead of turning the led on.
 					set_bit(P1OUT,LED);
 					//CICAD_PIORITY_LOST
 				}
@@ -164,7 +164,7 @@ void cicad_transmit(void) {
 				//Check for ack
 				
 				if(cicad_read_bit()!=1) {
-					///@TODO Something when there's no ack on tx
+					///@todo Something when there's no ack on tx
 					//CICAD_NO_ACK_RECIEVED
 				}
 				
@@ -192,6 +192,6 @@ CICAD_TIMER_INTERRUPT_VECTOR cicad_timer_vector() {
 	if(transmit) {
 		cicad_transmit();
 	} else {
-		///@TODO Recieve stuff
+		///@todo Recieve stuff
 	}
 }

@@ -1,8 +1,10 @@
 #ifndef CICAD_PHYSICAL_H
 #define CICAD_PHYSICAL_H
 
-///expects CICAD_PIN to be defined.
-///@TODO Have a way to input the MCU port into this file
+
+///@file cicad_physical.h
+///@note This file includes config.h and it expects CICAD_PIN to be defined.
+///@todo Have a way to input the MCU port from config.h to openCICAD.
 #include "config.h"
 
 ///Dominant bit definition, if it's either a logical low or high.
@@ -11,7 +13,6 @@
 
 ///Defines for easy use.
 ///@note these are not the logic level. But LOGIC_LEVEL_FOR_DOMINANT = CICAD_DOMINANT XNOR CICAD_POLARITY.
-///@example cicad_send_bit(CICAD_DOMINANT); //Send SoM
 #define CICAD_DOMINANT 1
 #define CICAD_RECESSIVE 0
 
