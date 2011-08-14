@@ -12,7 +12,7 @@ An interactive demonstration can be found in [doc/rxtx timer differences.kig](ht
 ![Timing diagram](https://github.com/amstan/openCICAD/raw/master/doc/rxtx%20timer%20differences.png)
 
 ### Tests
-An [experiment](https://github.com/amstan/openCICAD/commit/8c815d6a6f1e9d9fddbdd716e7f3e26aec59e194#commitcomment-530397) was done to check the results. Using an 11 period time length. RX works between 97.7%-105.9%.
+An [experiment](https://github.com/amstan/openCICAD/commit/8c815d6a6f1e9d9fddbdd716e7f3e26aec59e194#commitcomment-530397) was done to check the results. Using an 11 period time length. RX works between 97.7%-105.9%. This might be so restricted because of the difference in cpu frequencies.
 
 ## Changing the timing
 The speed of the communication depends on line length/quality. The longer the line the slower the communications have to go because of capacitance/other effects. The devices could be made to work slower by introducing them in a faster bus and transmitting a setup cicad packet to slow down communications.
