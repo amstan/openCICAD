@@ -24,6 +24,6 @@ The application layer describes the various types of messages that can be sent u
 
 The data layer defines a field in the header of messages that defines the type of message being sent. This message type field also doubles as a method of prioritizing traffic on the openCICAD network.
 
-The types of messages are maintained in the [Message Types](spec/messagetypes.md) document. You will find a complete list of the permissible types of messages on the openCICAD network.
+The types of messages are maintained in the [Message Types](messagetypes.md) document. You will find a complete list of the permissible types of messages on the openCICAD network.
 
 [Cicada Wiki]: http://en.wikipedia.org/wiki/Cicada
