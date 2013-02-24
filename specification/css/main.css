@@ -1,0 +1,14 @@
+body {
+	width: 8.5in;
+	font-family: sans-serif;
+	background-color: #DDF;
+}
+
+a {
+	outline: none;
+	color: #000;
+}
+
+a:hover {
+	color: #333;
+}

@@ -1,0 +1,5 @@
+# Ignore any files that could be part of the documentation package
+*.html
+*.png
+*.zip
+openCICAD/
