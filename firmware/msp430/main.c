@@ -57,8 +57,8 @@ int main(void)
 	//inits
 	init_chip();
 	init_io();
-	cicad_init(0x600); //0x624=100us according to my scope
-	cicad_init_edge_interrupt();
+	cicad_init(0x624); //0x624=100us according to my scope
+	//cicad_init_edge_interrupt();
 	
 	//tests done with 11 0s in a row, 0x624 tx timer
 	//tx version 0b1155b125f9820b7fae00209615e8074484f465, rx version current
@@ -69,14 +69,17 @@ int main(void)
 	
 	cicad_send_bit(0);
 	
-	//unsigned char a[] = {0b11000011};
+	unsigned char a[] = {0b11000011};
 	
 	transmit=0;
 	CICAD_SET_TIMER(cicad_1_period);
 	cicad_init_timer(1);
 	
 	while(1) {
-		//cicad_send_message(10, (sizeof a), a);
+		cicad_send_message(10, 0xffff, (sizeof a), a);
+		unsigned int i;
+		for(i=0;i<2;i++)
+			__delay_cycles(31000);
 	}
 }
 

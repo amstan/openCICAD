@@ -34,10 +34,10 @@ void cicad_calculate_period(unsigned int period) {
 	cicad_1_5_period=cicad_1_period+cicad_0_5_period;
 }
 
-void cicad_init_timer(unsigned char on) {
+void cicad_init_timer(bool on) {
 	TACTL |= TASSEL_2;      //Internal osc
 	TACTL |= ID_0;          //1x prescaler
-	change_bit(TACTL,4,on)  //Change the mode, on=1 => count up to taccr0, on=0 => stop
+	change_bit(TACTL,4,on); //Change the mode, on=true => count up to taccr0, on=false => stop
 	
 	//Enable Interrupts
 	CCTL0 |= CCIE; //Timer

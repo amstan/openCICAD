@@ -1,18 +1,18 @@
 #ifndef CICAD_PHYSICAL_H
 #define CICAD_PHYSICAL_H
 
+#include <stdbool.h>
 
 ///@file cicad_physical.h
 ///@note This file includes config.h and it expects CICAD_PIN to be defined.
 ///@todo Have a way to input the MCU port from config.h to openCICAD.
 #include "config.h"
 
-///Dominant bit definition, if it's either a logical low or high.
-///@note Polarity 0 belived to work.
+///Dominant bit definition for the hardware levels, if it's either a logical low or high.
 #define CICAD_POLARITY 1
 
-///Defines for easy use.
-///@note these are not the logic level. But LOGIC_LEVEL_FOR_DOMINANT = CICAD_DOMINANT XNOR CICAD_POLARITY.
+///Defines for use with cicad_read_bit and cicad_send_bit
+///@note These are not actually what the chip outputs on the pin. But HARDWARE_LEVEL_FOR_DOMINANT = CICAD_DOMINANT XNOR CICAD_POLARITY.
 #define CICAD_DOMINANT 1
 #define CICAD_RECESSIVE 0
 
@@ -38,7 +38,7 @@ inline void cicad_send_bit(unsigned char val);
 ///@param on if the timer should be on or off.
 ///@note This function also clears the overflow flag and the value in the timer.
 ///@note This function enables the timer interrupt.
-void cicad_init_timer(unsigned char on);
+void cicad_init_timer(bool on);
 
 ///Timer isr macro
 #define CICAD_TIMER_INTERRUPT_VECTOR void __attribute__((interrupt (TIMER0_A0_VECTOR)))
