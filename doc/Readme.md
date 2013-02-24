@@ -8,5 +8,5 @@ openCICAD (Controller Inter Communication Array Databus) is a serial interdevice
 * Messages are prioritized to aid in collision resolution
 
 ## Contents
-* [Timing](https://raw.github.com/amstan/openCICAD/master/doc/Timing.md)
-* [Message Structure](https://raw.github.com/amstan/openCICAD/master/doc/MessageStructure.md)
+* [Timing](Timing.md)
+* [Message Structure](MessageStructure.md)
