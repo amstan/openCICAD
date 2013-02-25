@@ -37,6 +37,13 @@ The address field denotes the 32-bit address of the destination device.
 ### Reserved
 The reserved section is 4 bits wide. These bits are reserved for future use and must be written to the openCICAD bus as recessive.
 
+#### Message Request
+When a device wants another device to send a specific message, he'll keep this bit on recessive.
+
+##### Example:
+A light bulb sends a message about its new state(turned on). Now it's expecting a message from the light bulb about its new state for the light switch led indicator.
+If eventually the light switch doesn't recieve such an update, it will send a light bulb status message with the Message Request bit set on recessive. If by chance the light bulb sends this message at the same time, the priority for the light switch will be lost, but there's no need anymore for the light switch to ask for the status.
+
 ### Length
 The length field specifies how long the data secion of the message is. The length field is 4 bits wide which puts an upper limit of 16 bytes on the data section of the message.
 
