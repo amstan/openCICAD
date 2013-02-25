@@ -12,7 +12,7 @@ The openCICAD protocol is big endian (network order).
 ## Start of Message (SoM)
 The first bit of any message is a dominant bit.
 
-## Byte Delimeters
+## Byte Delimiters
 Each byte in an openCICAD message ends with a byte delimeter. The value of the delimeter is the inverse of the LSB of the most recent byte sent. 
 
 ## Message Type
@@ -49,6 +49,9 @@ This field contains the CRC for the entire message and is calculated using Baich
 The CRC is calculated by the destination device in realtime. The receiver should know whether the data is valid or not by the time it is ready to assert a dominant bit during the Acknowledge bit period. If the CRC is invalid the receiver will not assert a dominant bit during the acknowledge.
 
 [Web-based CRC calculator](http://depa.usst.edu.cn/chenjq/www2/SDesign/JavaScript/CRCcalculation.htm)
+
+## Message Delimiter
+To prevent a momentary recessive glitch when the transmitter stops transmitting a dominant CRC2 delimiter and the acknowleger starts transmitting a dominant ACK.
 
 ## Acknowledge
 If the destination device receives this message without error they must drive the line dominant for the entire width of the acknowledge bit.
