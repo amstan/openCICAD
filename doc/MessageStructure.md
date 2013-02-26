@@ -26,7 +26,7 @@ The first two bits of the message type determine the range. There is also a spec
     01 .. 10 - Standard packets (Example: Light switch commands)
     11       - Very important packets (Example: Emergency stop commands)
 
-The testing range is located from 0xBFFFFF00 to 0xBFFFFFFF. Any message in this range must be ignored if the device is to be considered openCICAD compliant.
+The testing range is located from 0xBF00 to 0xBFFF. Any message in this range must be ignored if the device is to be considered openCICAD compliant.
 
 ## Address
 
